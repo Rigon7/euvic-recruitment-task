@@ -1,6 +1,7 @@
 import { useRoutes } from 'react-router-dom';
 import MainLayout from '../../application/layouts/main-layout/MainLayout';
-import Main from '../../application/pages/main/main';
+import Main from '../../application/pages/main/Main';
+import Views from '../../application/pages/views/views';
 
 const Router = (): React.ReactElement | null =>
     useRoutes([
@@ -9,8 +10,12 @@ const Router = (): React.ReactElement | null =>
             element: <MainLayout />,
             children: [
                 {
-                    path: '',
+                    path: '/',
                     element: <Main />
+                },
+                {
+                    path: 'views',
+                    element: <Views />
                 }
             ]
         }
