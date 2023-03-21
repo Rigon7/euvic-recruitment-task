@@ -1,20 +1,24 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import common from './static/i18n/common';
+import en from './static/i18n/en.json';
+import pl from './static/i18n/pl.json';
 
 const resources = {
     en: {
-        common
+        translation: en
+    },
+    pl: {
+        translation: pl
     }
 };
 
 i18n.use(initReactI18next) // passes i18n down to react-i18next
     .init({
         resources,
-        lng: 'en',
-        interpolation: {
-            escapeValue: false // react already safes from xss
-        }
+        lng: 'en'
+        // interpolation: {
+        //     escapeValue: false // react already safes from xss
+        // }
     });
 
 export default i18n;

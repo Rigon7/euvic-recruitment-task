@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
 const TableData = (): JSX.Element => {
-    const { t } = useTranslation('common');
+    const { t, i18n } = useTranslation();
     const columns: GridColDef[] = [
         {
             field: 'firstName',
@@ -20,7 +20,7 @@ const TableData = (): JSX.Element => {
         },
         {
             field: 'birthDate',
-            headerName: t('Birth Date') ?? '',
+            headerName: t('birthDate') ?? '',
             type: 'date',
             width: 110,
             editable: true

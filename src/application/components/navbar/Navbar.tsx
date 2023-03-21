@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import SelectLng from '../select/SelectLng';
 
 interface Props {
     window?: () => Window;
@@ -31,7 +32,7 @@ export default function DrawerAppBar(props: Props): JSX.Element {
     const handleDrawerToggle = (): void => {
         setMobileOpen((prevState) => !prevState);
     };
-    const { t } = useTranslation('common');
+    const { t } = useTranslation();
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
             <Typography variant="h5" sx={{ my: 2 }}>
@@ -46,6 +47,7 @@ export default function DrawerAppBar(props: Props): JSX.Element {
                         </ListItemButton>
                     </ListItem>
                 ))}
+                <SelectLng />
             </List>
         </Box>
     );
@@ -77,6 +79,7 @@ export default function DrawerAppBar(props: Props): JSX.Element {
                                 <Link to={item}>{t(item)}</Link>
                             </Button>
                         ))}
+                        <SelectLng />
                     </Box>
                 </Toolbar>
             </AppBar>

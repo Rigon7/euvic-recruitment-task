@@ -1,0 +1,10 @@
+{
+  "main": "Główny",
+  "views": "Widoki",
+  "firstName": "Imię",
+  "age": "Wiek",
+  "birthDate": "Data urodzenia",
+  "bio": "Biografia",
+  "english": "Angielski",
+  "polish": "Polski"
+}
