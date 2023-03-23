@@ -21,12 +21,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useTranslation } from 'react-i18next';
-
 interface Data {
-    name: string;
     age: number;
-    birthDate: number;
     bio: string;
+    birthDate: number;
+    name: string;
 }
 
 function createData(name: string, age: number, birthDate: number, bio: string): Data {
@@ -39,30 +38,9 @@ function createData(name: string, age: number, birthDate: number, bio: string): 
 }
 
 const rows = [
-    createData(
-        'Cupcake',
-        305,
-        3.7,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    ),
-    createData(
-        'Donut',
-        452,
-        25.0,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    ),
-    createData(
-        'Eclair',
-        262,
-        16.0,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    ),
-    createData(
-        'Frozen yoghurt',
-        159,
-        6.0,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    )
+    createData('Cupcake', 305, 3.7, 'abd'),
+    createData('Donut', 452, 25.0, 'abd'),
+    createData('Eclair', 262, 16.0, 'abd')
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -108,13 +86,13 @@ interface HeadCell {
     label: string;
     numeric: boolean;
 }
-
+const { t } = useTranslation();
 const headCells: readonly HeadCell[] = [
     {
         id: 'name',
         numeric: false,
         disablePadding: true,
-        label: 'firstName'
+        label: 'name'
     },
     {
         id: 'age',
@@ -126,13 +104,13 @@ const headCells: readonly HeadCell[] = [
         id: 'birthDate',
         numeric: true,
         disablePadding: false,
-        label: 'birthDate'
+        label: 'birthDate (g)'
     },
     {
         id: 'bio',
-        numeric: false,
+        numeric: true,
         disablePadding: false,
-        label: 'bio'
+        label: 'bio (g)'
     }
 ];
 
@@ -146,7 +124,6 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { t } = useTranslation();
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
@@ -176,7 +153,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}>
-                            {t(headCell.label)}
+                            {headCell.label}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -196,7 +173,6 @@ interface EnhancedTableToolbarProps {
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     const { numSelected } = props;
-    const { t } = useTranslation();
 
     return (
         <Toolbar
@@ -213,7 +189,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Typography>
             ) : (
                 <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-                    {t('listOfPeople')}
+                    Nutrition
                 </Typography>
             )}
             {numSelected > 0 ? (
@@ -223,7 +199,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title={t('filter')}>
+                <Tooltip title="Filter list">
                     <IconButton>
                         <FilterListIcon />
                     </IconButton>
@@ -240,7 +216,7 @@ export default function EnhancedTable() {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const { t } = useTranslation();
+
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -334,7 +310,6 @@ export default function EnhancedTable() {
                                                 {row.name}
                                             </TableCell>
                                             <TableCell align="right">{row.age}</TableCell>
-
                                             <TableCell align="right">{row.birthDate}</TableCell>
                                             <TableCell align="right">{row.bio}</TableCell>
                                         </TableRow>
@@ -359,10 +334,9 @@ export default function EnhancedTable() {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
-                    labelRowsPerPage={t('rowsPerPage')}
                 />
             </Paper>
-            {/* <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label="Dense padding" /> */}
+            <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label="Dense padding" />
         </Box>
     );
 }

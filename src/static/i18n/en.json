@@ -3,8 +3,15 @@
   "views": "Views",
   "firstName": "First Name",
   "age": "Age",
-  "birthDate": "Birth Date",
+  "birthDate": "Birth date",
   "bio": "Bio",
   "english": "English",
-  "polish": "Polish"
+  "polish": "Polish",
+  "rowsPerPage": "Rows per page",
+  "filter": "Filter",
+  "listOfPeople": "List of famous people",
+  "addRecord": "Add record",
+  "save":"Save",
+  "cancel":"Cancel",
+  "addPersonTitle":"Add a new person to the list"
 }

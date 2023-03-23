@@ -23,7 +23,16 @@ interface Props {
 }
 const drawerWidth = 240;
 
-const navItems = ['main', 'views'];
+const navItems = [
+    {
+        link: '/',
+        name: 'main'
+    },
+    {
+        link: '/views',
+        name: 'views'
+    }
+];
 
 export default function DrawerAppBar(props: Props): JSX.Element {
     const { window } = props;
@@ -41,9 +50,9 @@ export default function DrawerAppBar(props: Props): JSX.Element {
             <Divider />
             <List>
                 {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
+                    <ListItem key={item.name} disablePadding>
                         <ListItemButton sx={{ textAlign: 'center' }}>
-                            <Link to={item}>{t(item)}</Link>
+                            <Link to={item.link}>{t(item.name)}</Link>
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -75,8 +84,8 @@ export default function DrawerAppBar(props: Props): JSX.Element {
                     </Typography>
                     <Box sx={{ px: 5, display: { xs: 'none', sm: 'block' } }}>
                         {navItems.map((item) => (
-                            <Button key={item} sx={{ color: '#fff' }}>
-                                <Link to={item}>{t(item)}</Link>
+                            <Button key={item.name} sx={{ color: '#fff' }}>
+                                <Link to={item.link}>{t(item.name)}</Link>
                             </Button>
                         ))}
                         <SelectLng />

@@ -6,5 +6,12 @@
   "birthDate": "Data urodzenia",
   "bio": "Biografia",
   "english": "Angielski",
-  "polish": "Polski"
+  "polish": "Polski",
+  "rowsPerPage": "Wiersze na stronę",
+  "filter": "Filtr",
+  "listOfPeople": "Lista sławnych ludzi",
+  "addRecord": "Dodaj rekord",
+  "save":"Zapisz",
+  "cancel":"Anuluj",
+  "addPersonTitle":"Dodaj nową osobę do listy"
 }
