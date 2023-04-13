@@ -4,7 +4,8 @@
   "firstName": "Imię",
   "age": "Wiek",
   "birthDate": "Data urodzenia",
-  "bio": "Biografia",
+  "bio": "Życiorys",
+  "actions": "Akcje",
   "english": "Angielski",
   "polish": "Polski",
   "rowsPerPage": "Wiersze na stronę",
@@ -13,5 +14,14 @@
   "addRecord": "Dodaj rekord",
   "save":"Zapisz",
   "cancel":"Anuluj",
-  "addPersonTitle":"Dodaj nową osobę do listy"
+  "edit":"Edytuj",
+  "delete": "Usuń",
+  "addPersonTitle":"Dodaj nową osobę do listy",
+  "selected":"Wybrano",
+
+  "errorFirstNameRequired":"Podaj imię",
+  "errorAgeRequired": "Podaj wiek",
+  "errorAgeNotValid":"Wiek jest niepoprawny",
+  "errorBirthDateNotValid":"Wprowadź datę urodzenia",
+  "errorBioMaxCharacters":"Maksymalna ilość znaków to 250"
 }

@@ -5,6 +5,7 @@
   "age": "Age",
   "birthDate": "Birth date",
   "bio": "Bio",
+  "actions": "Actions",
   "english": "English",
   "polish": "Polish",
   "rowsPerPage": "Rows per page",
@@ -13,5 +14,14 @@
   "addRecord": "Add record",
   "save":"Save",
   "cancel":"Cancel",
-  "addPersonTitle":"Add a new person to the list"
+  "edit":"Edit",
+  "delete": "Delete",
+  "addPersonTitle":"Add a new person to the list",
+  "selected":"Selected",
+
+  "errorFirstNameRequired":"Enter your name",
+  "errorAgeRequired": "Enter the age",
+  "errorAgeNotValid":"Age is not valid",
+  "errorBirthDateNotValid":"Enter the birth date",
+  "errorBioMaxCharacters":"The maximum number of characters is 250"
 }

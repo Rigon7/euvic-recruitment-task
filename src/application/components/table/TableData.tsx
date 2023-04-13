@@ -22,47 +22,36 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useTranslation } from 'react-i18next';
 
-interface Data {
+interface TableRowData {
     name: string;
-    age: number;
-    birthDate: number;
+    age: string;
+    birthDate: string;
     bio: string;
+    actions: string;
 }
 
-function createData(name: string, age: number, birthDate: number, bio: string): Data {
-    return {
-        name,
-        age,
-        birthDate,
-        bio
-    };
-}
-
-const rows = [
-    createData(
-        'Cupcake',
-        305,
-        3.7,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    ),
-    createData(
-        'Donut',
-        452,
-        25.0,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    ),
-    createData(
-        'Eclair',
-        262,
-        16.0,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    ),
-    createData(
-        'Frozen yoghurt',
-        159,
-        6.0,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.'
-    )
+const rows: TableRowData[] = [
+    {
+        name: 'Cupcake',
+        age: '305',
+        birthDate: '12.12.1999',
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.',
+        actions: ''
+    },
+    {
+        name: 'b',
+        age: '305',
+        birthDate: '12.12.1999',
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.',
+        actions: ''
+    },
+    {
+        name: 'a',
+        age: '305',
+        birthDate: '12.12.1999',
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.',
+        actions: ''
+    }
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -104,7 +93,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
     disablePadding: boolean;
-    id: keyof Data;
+    id: keyof TableRowData;
     label: string;
     numeric: boolean;
 }
@@ -133,12 +122,18 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: 'bio'
+    },
+    {
+        id: 'actions',
+        numeric: false,
+        disablePadding: false,
+        label: 'actions'
     }
 ];
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TableRowData) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
@@ -148,7 +143,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { t } = useTranslation();
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof TableRowData) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -207,27 +202,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
                 })
             }}>
-            {numSelected > 0 ? (
-                <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-                    {t('listOfPeople')}
-                </Typography>
-            )}
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title={t('filter')}>
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
+            {numSelected > 0 && (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Tooltip title="Delete">
+                        <IconButton>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
+                        {numSelected} {t('selected')}
+                    </Typography>
+                </Box>
             )}
         </Toolbar>
     );
@@ -235,13 +220,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('age');
+    const [orderBy, setOrderBy] = React.useState<keyof TableRowData>('age');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const { t } = useTranslation();
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TableRowData) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -294,7 +279,6 @@ export default function EnhancedTable() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
                         <EnhancedTableHead
@@ -320,7 +304,8 @@ export default function EnhancedTable() {
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.name}
-                                            selected={isItemSelected}>
+                                            selected={isItemSelected}
+                                            sx={{ alignItems: 'center' }}>
                                             <TableCell padding="checkbox">
                                                 <Checkbox
                                                     color="primary"
@@ -334,9 +319,12 @@ export default function EnhancedTable() {
                                                 {row.name}
                                             </TableCell>
                                             <TableCell align="right">{row.age}</TableCell>
-
                                             <TableCell align="right">{row.birthDate}</TableCell>
                                             <TableCell align="right">{row.bio}</TableCell>
+                                            <TableCell sx={{ display: 'flex', gap: 2 }}>
+                                                <button>{t('edit')}</button>
+                                                <button>{t('delete')}</button>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -351,16 +339,21 @@ export default function EnhancedTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    labelRowsPerPage={t('rowsPerPage')}
-                />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', allignItems: 'center' }}>
+                    <EnhancedTableToolbar numSelected={selected.length} />
+
+                    <TablePagination
+                        sx={{ display: 'flex', allignItems: 'center' }}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        labelRowsPerPage={t('rowsPerPage')}
+                    />
+                </Box>
             </Paper>
             {/* <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label="Dense padding" /> */}
         </Box>
