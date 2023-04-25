@@ -1,16 +1,10 @@
 import { PeopleData } from '../../exampleData/exampleData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PersonData } from '../../interfaces/PersonDataInterface';
 
-interface Person {
-    name: string;
-    age: number;
-    birthDate: string;
-    bio: string;
-}
-
-interface PersonState {
+export interface PersonState {
     loading: boolean;
-    persons: Person[];
+    persons: PersonData[];
 }
 
 const initialState: PersonState = {
@@ -22,10 +16,10 @@ const personSlice = createSlice({
     name: 'person',
     initialState,
     reducers: {
-        addPerson(state, action: PayloadAction<Person>) {
+        addPerson(state, action: PayloadAction<PersonData>) {
             state.persons.push(action.payload);
         },
-        updatePerson(state, action: PayloadAction<Person>) {
+        updatePerson(state, action: PayloadAction<PersonData>) {
             const index = state.persons.findIndex((person) => person.name === action.payload.name);
             if (index !== -1) {
                 state.persons[index] = action.payload;

@@ -14,57 +14,20 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    TableSortLabel,
     Toolbar,
     Tooltip,
     Typography
 } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { deletePerson } from '../../redux/features/ManageTable';
+import { deletePerson } from '../../redux/features/PersonReducer';
+import { PersonData } from '../../interfaces/PersonDataInterface';
+import { StoreState } from '../../redux/store/store';
 
-interface TableRowData {
-    name: string;
-    age: string;
-    birthDate: string;
-    bio: string;
-    actions: string;
-}
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
+interface TableRowData extends PersonData {
+    actions?: string;
 }
 
 interface HeadCell {
@@ -109,19 +72,13 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TableRowData) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
     rowCount: number;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
+function EnhancedTableHead(props: EnhancedTableProps): JSX.Element {
     const { t } = useTranslation();
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof TableRowData) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
+    const { onSelectAllClick, numSelected, rowCount } = props;
 
     return (
         <TableHead>
@@ -139,19 +96,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}>
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}>
-                            {t(headCell.label)}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        padding={headCell.disablePadding ? 'none' : 'normal'}>
+                        {t(headCell.label)}
                     </TableCell>
                 ))}
             </TableRow>
@@ -164,12 +110,14 @@ interface EnhancedTableToolbarProps {
     setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
 }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+function EnhancedTableToolbar(props: EnhancedTableToolbarProps): JSX.Element {
     const { selected, setSelected } = props;
     const numSelected = selected.length;
     const { t } = useTranslation();
+
     const dispatch = useDispatch();
-    const handleDeleteSelected = () => {
+
+    const handleDeleteSelected = (): void => {
         selected.forEach((element) => {
             dispatch(deletePerson(element));
             setSelected([]);
@@ -201,21 +149,14 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     );
 }
 
-export default function EnhancedTable() {
-    const rows: TableRowData[] = useSelector((state: any) => state.people.persons);
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof TableRowData>('age');
+export default function EnhancedTable(): JSX.Element {
+    const rows: TableRowData[] = useSelector((state: StoreState) => state.people.persons);
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { t } = useTranslation();
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TableRowData) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>): void => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.name);
             setSelected(newSelected);
@@ -224,7 +165,7 @@ export default function EnhancedTable() {
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    const handleClick = (event: React.MouseEvent<unknown>, name: string): void => {
         const selectedIndex = selected.indexOf(name);
         let newSelected: readonly string[] = [];
 
@@ -241,22 +182,22 @@ export default function EnhancedTable() {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
+    const handleChangePage = (event: unknown, newPage: number): void => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const isSelected = (name: string) => selected.indexOf(name) !== -1;
+    const isSelected = (name: string): boolean => selected.indexOf(name) !== -1;
 
-    // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     const dispatch = useDispatch();
-    const handleDeleteSingleRow = (event: React.MouseEvent<unknown>, name: string) => {
+    const handleDeleteSingleRow = (event: React.MouseEvent<unknown>, name: string): void => {
         dispatch(deletePerson(name));
+        setSelected([]);
     };
 
     return (
@@ -266,53 +207,49 @@ export default function EnhancedTable() {
                     <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
                         <EnhancedTableHead
                             numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                                const isItemSelected = isSelected(row.name);
+                                const labelId = `enhanced-table-checkbox-${index}`;
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            sx={{ alignItems: 'center' }}>
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    onClick={(event) => handleClick(event, row.name)}
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="right">{row.age}</TableCell>
-                                            <TableCell align="right">{row.birthDate}</TableCell>
-                                            <TableCell align="right">{row.bio}</TableCell>
-                                            <TableCell>
-                                                <ButtonGroup variant="text" aria-label="text button group">
-                                                    <Button>{t('edit')}</Button>
-                                                    <Button onClick={(event) => handleDeleteSingleRow(event, row.name)}>
-                                                        {t('delete')}
-                                                    </Button>
-                                                </ButtonGroup>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
+                                return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={row.name}
+                                        sx={{ alignItems: 'center' }}>
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event): void => handleClick(event, row.name)}
+                                                color="primary"
+                                                checked={isItemSelected}
+                                                inputProps={{
+                                                    'aria-labelledby': labelId
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell align="right">{row.age}</TableCell>
+                                        <TableCell align="right">{row.birthDate}</TableCell>
+                                        <TableCell align="right">{row.bio}</TableCell>
+                                        <TableCell>
+                                            <ButtonGroup variant="text" aria-label="text button group">
+                                                <Button>{t('edit')}</Button>
+                                                <Button
+                                                    onClick={(event): void => handleDeleteSingleRow(event, row.name)}>
+                                                    {t('delete')}
+                                                </Button>
+                                            </ButtonGroup>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{

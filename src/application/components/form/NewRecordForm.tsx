@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
-import { MouseEventHandler } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,16 +7,10 @@ import * as yup from 'yup';
 import moment from 'moment';
 
 import { useDispatch } from 'react-redux';
-import { addPerson } from '../../redux/features/ManageTable';
+import { addPerson } from '../../redux/features/PersonReducer';
+import { PersonData } from '../../interfaces/PersonDataInterface';
 
-interface NewRecordFormData {
-    name: string;
-    age: number;
-    birthDate: string;
-    bio: string;
-}
-
-const NewRecordForm = (props: { handleClose: MouseEventHandler<HTMLButtonElement> | undefined }): JSX.Element => {
+const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
     const { t } = useTranslation();
     const today = moment();
 
@@ -42,13 +35,13 @@ const NewRecordForm = (props: { handleClose: MouseEventHandler<HTMLButtonElement
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<NewRecordFormData>({
+    } = useForm<PersonData>({
         resolver: yupResolver(schema)
     });
 
     const dispatch = useDispatch();
 
-    const onSubmit = (data: NewRecordFormData): void => {
+    const onSubmit = (data: PersonData): void => {
         const date = new Date(data.birthDate);
         const year = date.getFullYear();
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -56,7 +49,7 @@ const NewRecordForm = (props: { handleClose: MouseEventHandler<HTMLButtonElement
         data.birthDate = `${year}-${month}-${day}`;
 
         dispatch(addPerson(data));
-        //props.handleClose();
+        if (props !== undefined) props.handleClose();
     };
 
     return (

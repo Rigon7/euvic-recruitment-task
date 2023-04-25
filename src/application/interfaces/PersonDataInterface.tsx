@@ -1,5 +1,6 @@
-export interface PersonDataInterface {
-    firstName: string;
+export interface PersonData {
+    id: number;
+    name: string;
     age: number;
     birthDate: string;
     bio: string;
