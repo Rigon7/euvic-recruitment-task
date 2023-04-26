@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useDispatch } from 'react-redux';
 import { addPerson } from '../../redux/features/PersonReducer';
@@ -47,6 +48,7 @@ const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const day = ('0' + date.getDate()).slice(-2);
         data.birthDate = `${year}-${month}-${day}`;
+        data.id = uuidv4();
 
         dispatch(addPerson(data));
         if (props !== undefined) props.handleClose();

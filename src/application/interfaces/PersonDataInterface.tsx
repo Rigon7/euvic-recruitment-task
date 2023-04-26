@@ -1,5 +1,5 @@
 export interface PersonData {
-    id: number;
+    id: string;
     name: string;
     age: number;
     birthDate: string;

@@ -158,19 +158,19 @@ export default function EnhancedTable(): JSX.Element {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>): void => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name);
+            const newSelected = rows.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string): void => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (event: React.MouseEvent<unknown>, id: string): void => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected: readonly string[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -191,12 +191,12 @@ export default function EnhancedTable(): JSX.Element {
         setPage(0);
     };
 
-    const isSelected = (name: string): boolean => selected.indexOf(name) !== -1;
+    const isSelected = (id: string): boolean => selected.indexOf(id) !== -1;
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     const dispatch = useDispatch();
-    const handleDeleteSingleRow = (event: React.MouseEvent<unknown>, name: string): void => {
-        dispatch(deletePerson(name));
+    const handleDeleteSingleRow = (event: React.MouseEvent<unknown>, id: string): void => {
+        dispatch(deletePerson(id));
         setSelected([]);
     };
 
@@ -212,7 +212,7 @@ export default function EnhancedTable(): JSX.Element {
                         />
                         <TableBody>
                             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                                const isItemSelected = isSelected(row.name);
+                                const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
@@ -220,11 +220,11 @@ export default function EnhancedTable(): JSX.Element {
                                         hover
                                         role="checkbox"
                                         tabIndex={-1}
-                                        key={row.name}
+                                        key={row.id}
                                         sx={{ alignItems: 'center' }}>
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                                onClick={(event): void => handleClick(event, row.name)}
+                                                onClick={(event): void => handleClick(event, row.id)}
                                                 color="primary"
                                                 checked={isItemSelected}
                                                 inputProps={{
@@ -241,8 +241,7 @@ export default function EnhancedTable(): JSX.Element {
                                         <TableCell>
                                             <ButtonGroup variant="text" aria-label="text button group">
                                                 <Button>{t('edit')}</Button>
-                                                <Button
-                                                    onClick={(event): void => handleDeleteSingleRow(event, row.name)}>
+                                                <Button onClick={(event): void => handleDeleteSingleRow(event, row.id)}>
                                                     {t('delete')}
                                                 </Button>
                                             </ButtonGroup>

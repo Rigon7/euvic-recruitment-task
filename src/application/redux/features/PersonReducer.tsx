@@ -26,7 +26,7 @@ const personSlice = createSlice({
             }
         },
         deletePerson(state, action: PayloadAction<string>) {
-            state.persons = state.persons.filter((person) => person.name !== action.payload);
+            state.persons = state.persons.filter((person) => person.id !== action.payload);
         }
     }
 });
