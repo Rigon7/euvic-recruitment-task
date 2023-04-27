@@ -21,8 +21,8 @@ const style = {
 const FormModal = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const { t } = useTranslation();
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpen = (): void => setOpen(true);
+    const handleClose = (): void => setOpen(false);
 
     return (
         <div>

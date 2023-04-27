@@ -1,94 +1,33 @@
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import {
+    alpha,
+    Box,
+    Button,
+    ButtonGroup,
+    Checkbox,
+    IconButton,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    Toolbar,
+    Tooltip,
+    Typography
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { deletePerson } from '../../redux/features/PersonReducer';
+import { PersonData } from '../../interfaces/PersonDataInterface';
+import { StoreState } from '../../redux/store/store';
 
-interface TableRowData {
-    name: string;
-    age: string;
-    birthDate: string;
-    bio: string;
-    actions: string;
-}
-
-const rows: TableRowData[] = [
-    {
-        name: 'Cupcake',
-        age: '305',
-        birthDate: '12.12.1999',
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.',
-        actions: ''
-    },
-    {
-        name: 'b',
-        age: '305',
-        birthDate: '12.12.1999',
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.',
-        actions: ''
-    },
-    {
-        name: 'a',
-        age: '305',
-        birthDate: '12.12.1999',
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam id nisl non elit elementum bibendum. Cras eleifend ligula purus, ut eleifend magna fringilla et. Donec ullamcorper vulputate ex, sit amet pretium enim iaculis et. Donec quis sagittis leo.',
-        actions: ''
-    }
-];
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
+interface TableRowData extends PersonData {
+    actions?: string;
 }
 
 interface HeadCell {
@@ -133,19 +72,13 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TableRowData) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
     rowCount: number;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
+function EnhancedTableHead(props: EnhancedTableProps): JSX.Element {
     const { t } = useTranslation();
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof TableRowData) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
+    const { onSelectAllClick, numSelected, rowCount } = props;
 
     return (
         <TableHead>
@@ -156,28 +89,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts'
-                        }}
+                        inputProps={{}}
                     />
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}>
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}>
-                            {t(headCell.label)}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        padding={headCell.disablePadding ? 'none' : 'normal'}>
+                        {t(headCell.label)}
                     </TableCell>
                 ))}
             </TableRow>
@@ -186,12 +106,23 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-    numSelected: number;
+    selected: readonly string[];
+    setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
 }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
+function EnhancedTableToolbar(props: EnhancedTableToolbarProps): JSX.Element {
+    const { selected, setSelected } = props;
+    const numSelected = selected.length;
     const { t } = useTranslation();
+
+    const dispatch = useDispatch();
+
+    const handleDeleteSelected = (): void => {
+        selected.forEach((element) => {
+            dispatch(deletePerson(element));
+            setSelected([]);
+        });
+    };
 
     return (
         <Toolbar
@@ -205,7 +136,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             {numSelected > 0 && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Tooltip title="Delete">
-                        <IconButton>
+                        <IconButton onClick={handleDeleteSelected}>
                             <DeleteIcon />
                         </IconButton>
                     </Tooltip>
@@ -218,35 +149,28 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     );
 }
 
-export default function EnhancedTable() {
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof TableRowData>('age');
+export default function EnhancedTable(): JSX.Element {
+    const rows: TableRowData[] = useSelector((state: StoreState) => state.people.persons);
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { t } = useTranslation();
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TableRowData) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>): void => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name);
+            const newSelected = rows.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (event: React.MouseEvent<unknown>, id: string): void => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected: readonly string[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -258,80 +182,77 @@ export default function EnhancedTable() {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
+    const handleChangePage = (event: unknown, newPage: number): void => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDense(event.target.checked);
-    };
+    const isSelected = (id: string): boolean => selected.indexOf(id) !== -1;
 
-    const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-    // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    const dispatch = useDispatch();
+    const handleDeleteSingleRow = (event: React.MouseEvent<unknown>, id: string): void => {
+        dispatch(deletePerson(id));
+        setSelected([]);
+    };
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
-                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
                         <EnhancedTableHead
                             numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                                const isItemSelected = isSelected(row.id);
+                                const labelId = `enhanced-table-checkbox-${index}`;
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                            sx={{ alignItems: 'center' }}>
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="right">{row.age}</TableCell>
-                                            <TableCell align="right">{row.birthDate}</TableCell>
-                                            <TableCell align="right">{row.bio}</TableCell>
-                                            <TableCell sx={{ display: 'flex', gap: 2 }}>
-                                                <button>{t('edit')}</button>
-                                                <button>{t('delete')}</button>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
+                                return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        sx={{ alignItems: 'center' }}>
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event): void => handleClick(event, row.id)}
+                                                color="primary"
+                                                checked={isItemSelected}
+                                                inputProps={{
+                                                    'aria-labelledby': labelId
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell align="right">{row.age}</TableCell>
+                                        <TableCell align="right">{row.birthDate}</TableCell>
+                                        <TableCell align="right">{row.bio}</TableCell>
+                                        <TableCell>
+                                            <ButtonGroup variant="text" aria-label="text button group">
+                                                <Button>{t('edit')}</Button>
+                                                <Button onClick={(event): void => handleDeleteSingleRow(event, row.id)}>
+                                                    {t('delete')}
+                                                </Button>
+                                            </ButtonGroup>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{
-                                        height: (dense ? 33 : 53) * emptyRows
+                                        height: 53 * emptyRows
                                     }}>
                                     <TableCell colSpan={6} />
                                 </TableRow>
@@ -340,11 +261,11 @@ export default function EnhancedTable() {
                     </Table>
                 </TableContainer>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', allignItems: 'center' }}>
-                    <EnhancedTableToolbar numSelected={selected.length} />
+                    <EnhancedTableToolbar selected={selected} setSelected={setSelected} />
 
                     <TablePagination
                         sx={{ display: 'flex', allignItems: 'center' }}
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[10, 20, 50]}
                         component="div"
                         count={rows.length}
                         rowsPerPage={rowsPerPage}
@@ -355,7 +276,6 @@ export default function EnhancedTable() {
                     />
                 </Box>
             </Paper>
-            {/* <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label="Dense padding" /> */}
         </Box>
     );
 }

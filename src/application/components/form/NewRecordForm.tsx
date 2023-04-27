@@ -1,24 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
-import { MouseEventHandler } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import moment from 'moment';
-interface NewRecordFormData {
-    firstName: string;
-    age: number;
-    birthDate: string;
-    bio: string;
-}
+import { v4 as uuidv4 } from 'uuid';
 
-const NewRecordForm = (props: { handleClose: MouseEventHandler<HTMLButtonElement> | undefined }): JSX.Element => {
+import { useDispatch } from 'react-redux';
+import { addPerson } from '../../redux/features/PersonReducer';
+import { PersonData } from '../../interfaces/PersonDataInterface';
+
+const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
     const { t } = useTranslation();
     const today = moment();
 
     const schema = yup.object().shape({
-        firstName: yup.string().required(t('errorFirstNameRequired') ?? ''),
+        name: yup.string().required(t('errorFirstNameRequired') ?? ''),
         age: yup
             .string()
             .required(t('errorAgeRequired') ?? '')
@@ -38,18 +36,28 @@ const NewRecordForm = (props: { handleClose: MouseEventHandler<HTMLButtonElement
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<NewRecordFormData>({
+    } = useForm<PersonData>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = (data: NewRecordFormData): void => {
-        console.log(data);
+    const dispatch = useDispatch();
+
+    const onSubmit = (data: PersonData): void => {
+        const date = new Date(data.birthDate);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        data.birthDate = `${year}-${month}-${day}`;
+        data.id = uuidv4();
+
+        dispatch(addPerson(data));
+        if (props !== undefined) props.handleClose();
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder={t('firstName') ?? ''} {...register('firstName')} />
-            <Typography>{errors.firstName?.message?.toString()}</Typography>
+            <input type="text" placeholder={t('name') ?? ''} {...register('name')} />
+            <Typography>{errors.name?.message?.toString()}</Typography>
 
             <input type="number" placeholder={t('age') ?? ''} {...register('age')} />
             <Typography>{errors.age?.message?.toString()}</Typography>
