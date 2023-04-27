@@ -10,7 +10,7 @@ const SelectLng = (): JSX.Element => {
 
     const [Language, setLanguage] = useState('en');
 
-    const handleLanguageChange = (event: SelectChangeEvent) => {
+    const handleLanguageChange = (event: SelectChangeEvent): void => {
         setLanguage(event.target.value);
         i18n.changeLanguage(event.target.value);
     };

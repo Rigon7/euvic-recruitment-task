@@ -11,7 +11,7 @@ const Router = (): React.ReactElement | null =>
             element: <MainLayout />,
             children: [
                 {
-                    path: '/',
+                    path: 'main',
                     element: <Main />
                 },
                 {

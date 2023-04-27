@@ -25,6 +25,7 @@ import { useDispatch } from 'react-redux';
 import { deletePerson } from '../../redux/features/PersonReducer';
 import { PersonData } from '../../interfaces/PersonDataInterface';
 import { StoreState } from '../../redux/store/store';
+import FormModal from '../modal/FormModal';
 
 interface TableRowData extends PersonData {
     actions?: string;
@@ -150,7 +151,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps): JSX.Element {
 }
 
 export default function EnhancedTable(): JSX.Element {
-    const rows: TableRowData[] = useSelector((state: StoreState) => state.people.persons);
+    const rows: TableRowData[] = useSelector((state: StoreState) => state.people.people);
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -235,12 +236,12 @@ export default function EnhancedTable(): JSX.Element {
                                         <TableCell component="th" id={labelId} scope="row" padding="none">
                                             {row.name}
                                         </TableCell>
-                                        <TableCell align="right">{row.age}</TableCell>
-                                        <TableCell align="right">{row.birthDate}</TableCell>
-                                        <TableCell align="right">{row.bio}</TableCell>
+                                        <TableCell align="center">{row.age}</TableCell>
+                                        <TableCell align="center">{row.birthDate}</TableCell>
+                                        <TableCell align="left">{row.bio}</TableCell>
                                         <TableCell>
                                             <ButtonGroup variant="text" aria-label="text button group">
-                                                <Button>{t('edit')}</Button>
+                                                <FormModal person={rows[index]}>{t('edit')}</FormModal>
                                                 <Button onClick={(event): void => handleDeleteSingleRow(event, row.id)}>
                                                     {t('delete')}
                                                 </Button>

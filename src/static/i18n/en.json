@@ -1,6 +1,6 @@
 {
-  "main": "Main",
-  "views": "Views",
+  "main": "List",
+  "views": "Tiles",
   "firstName": "First Name",
   "age": "Age",
   "birthDate": "Birth date",
@@ -16,7 +16,7 @@
   "cancel":"Cancel",
   "edit":"Edit",
   "delete": "Delete",
-  "addPersonTitle":"Add a new person to the list",
+  "addPersonTitle":"Fill out information about the person",
   "selected":"Selected",
 
   "errorFirstNameRequired":"Enter your name",
