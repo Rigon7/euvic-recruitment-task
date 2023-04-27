@@ -1,0 +1,26 @@
+.table-row {
+    &__checkbox {
+        width: 2%;
+    }
+    &__name {
+    }
+    &__age {
+        width: 5%;
+    }
+    &__birthDate {
+        width: 15%;
+    }
+    &__bio {
+        width: 45%;
+    }
+    &__bio span {
+        width: 30rem;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    &__actions {
+        width: 5%;
+    }
+}
