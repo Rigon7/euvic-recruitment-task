@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styles from './TableData.module.scss';
 import {
     alpha,
     Box,
@@ -19,12 +20,15 @@ import {
     Typography
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import { useTranslation } from 'react-i18next';
+
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { deletePerson } from '../../redux/features/PersonReducer';
-import { PersonData } from '../../interfaces/PersonDataInterface';
 import { StoreState } from '../../redux/store/store';
+
+import { PersonData } from '../../interfaces/PersonDataInterface';
 import FormModal from '../modal/FormModal';
 
 interface TableRowData extends PersonData {
@@ -35,37 +39,37 @@ interface HeadCell {
     disablePadding: boolean;
     id: keyof TableRowData;
     label: string;
-    numeric: boolean;
+    align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
 }
 
 const headCells: readonly HeadCell[] = [
     {
         id: 'name',
-        numeric: false,
+        align: 'center',
         disablePadding: true,
         label: 'firstName'
     },
     {
         id: 'age',
-        numeric: true,
+        align: 'center',
         disablePadding: false,
         label: 'age'
     },
     {
         id: 'birthDate',
-        numeric: true,
+        align: 'center',
         disablePadding: false,
         label: 'birthDate'
     },
     {
         id: 'bio',
-        numeric: false,
+        align: 'left',
         disablePadding: false,
         label: 'bio'
     },
     {
         id: 'actions',
-        numeric: false,
+        align: 'center',
         disablePadding: false,
         label: 'actions'
     }
@@ -96,8 +100,10 @@ function EnhancedTableHead(props: EnhancedTableProps): JSX.Element {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}>
+                        align={headCell.align}
+                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        sx={{ pt: 2, pb: 2, fontWeight: 'bold' }}
+                        className={styles[`table-row__${headCell.id}`]}>
                         {t(headCell.label)}
                     </TableCell>
                 ))}
@@ -205,7 +211,7 @@ export default function EnhancedTable(): JSX.Element {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
-                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'small'}>
                         <EnhancedTableHead
                             numSelected={selected.length}
                             onSelectAllClick={handleSelectAllClick}
@@ -222,8 +228,9 @@ export default function EnhancedTable(): JSX.Element {
                                         role="checkbox"
                                         tabIndex={-1}
                                         key={row.id}
+                                        className={styles['table-row']}
                                         sx={{ alignItems: 'center' }}>
-                                        <TableCell padding="checkbox">
+                                        <TableCell padding="checkbox" className={styles['table-row__checkbox']}>
                                             <Checkbox
                                                 onClick={(event): void => handleClick(event, row.id)}
                                                 color="primary"
@@ -233,13 +240,19 @@ export default function EnhancedTable(): JSX.Element {
                                                 }}
                                             />
                                         </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none">
+                                        <TableCell align="center" padding="none" className={styles['table-row__name']}>
                                             {row.name}
                                         </TableCell>
-                                        <TableCell align="center">{row.age}</TableCell>
-                                        <TableCell align="center">{row.birthDate}</TableCell>
-                                        <TableCell align="left">{row.bio}</TableCell>
-                                        <TableCell>
+                                        <TableCell align="center" className={styles['table-row__age']}>
+                                            {row.age}
+                                        </TableCell>
+                                        <TableCell align="center" className={styles['table-row__birthDate']}>
+                                            {row.birthDate}
+                                        </TableCell>
+                                        <TableCell align="left" className={styles['table-row__bio']}>
+                                            <span>{row.bio}</span>
+                                        </TableCell>
+                                        <TableCell align="center" className={styles['table-row__actions']}>
                                             <ButtonGroup variant="text" aria-label="text button group">
                                                 <FormModal person={rows[index]}>{t('edit')}</FormModal>
                                                 <Button onClick={(event): void => handleDeleteSingleRow(event, row.id)}>

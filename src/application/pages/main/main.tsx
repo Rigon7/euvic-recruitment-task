@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import FormModal from '../../components/modal/FormModal';
 import TableData from '../../components/table/TableData';
-import styles from './Main.module.scss';
+import { Box } from '@mui/material';
+
 const Main = (): JSX.Element => {
     const { t } = useTranslation();
     return (
-        <div className={styles['test']}>
+        <Box>
             <FormModal>{t('addRecord')}</FormModal>
             <TableData />
-        </div>
+        </Box>
     );
 };
 export default Main;
