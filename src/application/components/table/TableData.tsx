@@ -29,7 +29,7 @@ import { deletePerson } from '../../redux/features/PersonReducer';
 import { StoreState } from '../../redux/store/store';
 
 import { PersonData } from '../../interfaces/PersonDataInterface';
-import FormModal from '../modal/FormModal';
+import FormModal from '../modals/FormModal';
 
 interface TableRowData extends PersonData {
     actions?: string;

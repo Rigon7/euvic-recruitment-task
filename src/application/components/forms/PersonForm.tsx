@@ -57,7 +57,6 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
         data.birthDate = `${year}-${month}-${day}`;
 
         if (props.person) {
-            console.log('wysyłany obiekt', data);
             dispatch(updatePerson(data));
         } else {
             data.id = uuidv4();

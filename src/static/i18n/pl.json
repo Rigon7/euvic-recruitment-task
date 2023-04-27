@@ -12,6 +12,7 @@
   "filter": "Filtr",
   "listOfPeople": "Lista sławnych ludzi",
   "addRecord": "Dodaj osobę",
+
   "save":"Zapisz",
   "cancel":"Anuluj",
   "edit":"Edytuj",
@@ -19,9 +20,16 @@
   "addPersonTitle":"Wypełnij informacje o osobie",
   "selected":"Wybrano",
 
+  "homeBtn":"Strona główna",
+
   "errorFirstNameRequired":"Podaj imię",
   "errorAgeRequired": "Podaj wiek",
   "errorAgeNotValid":"Wiek jest niepoprawny",
   "errorBirthDateNotValid":"Wprowadź datę urodzenia",
-  "errorBioMaxCharacters":"Maksymalna ilość znaków to 250"
+  "errorBioMaxCharacters":"Maksymalna ilość znaków to 250",
+
+  "AlertTitle_NoPeople":"Brak osób do wyświetlenia",
+  "AlertDesc_NoPeople":"Możesz dodać pierwszą osobę tutaj:",
+  "AlertTitle_404":"Nie znaleziono strony",
+  "AlertDesc_404":"Strona, której szukasz mogła zostać usunięta lub jest chwilowo niedostępna."
 }

@@ -1,11 +1,18 @@
-import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
+
+import ResponsiveGrid from '../../components/grid/ResponsiveGrid';
+import { useSelector } from 'react-redux';
+import { StoreState } from '../../redux/store/store';
+import { PersonData } from '../../interfaces/PersonDataInterface';
 
 const Views = (): JSX.Element => {
-    const { t } = useTranslation();
+    const peopleData: PersonData[] = useSelector((state: StoreState) => state.people.people);
+
     return (
-        <div>
-            <h2>{t('views')}</h2>
-        </div>
+        <Box>
+            <ResponsiveGrid data={peopleData} />
+        </Box>
     );
 };
+
 export default Views;

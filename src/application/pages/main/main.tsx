@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import FormModal from '../../components/modal/FormModal';
+import FormModal from '../../components/modals/FormModal';
 import TableData from '../../components/table/TableData';
 import { Box } from '@mui/material';
 
