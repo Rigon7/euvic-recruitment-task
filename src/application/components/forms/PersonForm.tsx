@@ -8,10 +8,10 @@ import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDispatch } from 'react-redux';
-import { addPerson } from '../../redux/features/PersonReducer';
+import { addPerson, updatePerson } from '../../redux/features/PersonReducer';
 import { PersonData } from '../../interfaces/PersonDataInterface';
 
-const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
+const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JSX.Element => {
     const { t } = useTranslation();
     const today = moment();
 
@@ -37,7 +37,14 @@ const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
         handleSubmit,
         formState: { errors }
     } = useForm<PersonData>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        defaultValues: {
+            id: props.person?.id || '',
+            name: props.person?.name || '',
+            age: props.person?.age || undefined,
+            birthDate: props.person?.birthDate || '',
+            bio: props.person?.bio || ''
+        }
     });
 
     const dispatch = useDispatch();
@@ -48,15 +55,20 @@ const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const day = ('0' + date.getDate()).slice(-2);
         data.birthDate = `${year}-${month}-${day}`;
-        data.id = uuidv4();
 
-        dispatch(addPerson(data));
+        if (props.person) {
+            console.log('wysyłany obiekt', data);
+            dispatch(updatePerson(data));
+        } else {
+            data.id = uuidv4();
+            dispatch(addPerson(data));
+        }
         if (props !== undefined) props.handleClose();
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder={t('name') ?? ''} {...register('name')} />
+            <input type="text" placeholder={t('firstName') ?? ''} {...register('name')} />
             <Typography>{errors.name?.message?.toString()}</Typography>
 
             <input type="number" placeholder={t('age') ?? ''} {...register('age')} />
@@ -75,4 +87,4 @@ const NewRecordForm = (props: { handleClose: () => void }): JSX.Element => {
     );
 };
 
-export default NewRecordForm;
+export default PersonForm;

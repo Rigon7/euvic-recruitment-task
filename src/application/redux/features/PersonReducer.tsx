@@ -4,12 +4,12 @@ import { PersonData } from '../../interfaces/PersonDataInterface';
 
 export interface PersonState {
     loading: boolean;
-    persons: PersonData[];
+    people: PersonData[];
 }
 
 const initialState: PersonState = {
     loading: false,
-    persons: PeopleData
+    people: PeopleData
 };
 
 const personSlice = createSlice({
@@ -17,16 +17,16 @@ const personSlice = createSlice({
     initialState,
     reducers: {
         addPerson(state, action: PayloadAction<PersonData>) {
-            state.persons.push(action.payload);
+            state.people.unshift(action.payload);
         },
         updatePerson(state, action: PayloadAction<PersonData>) {
-            const index = state.persons.findIndex((person) => person.name === action.payload.name);
-            if (index !== -1) {
-                state.persons[index] = action.payload;
+            const personToUpdate = state.people.find((person) => person.id === action.payload.id);
+            if (personToUpdate) {
+                Object.assign(personToUpdate, action.payload);
             }
         },
         deletePerson(state, action: PayloadAction<string>) {
-            state.persons = state.persons.filter((person) => person.id !== action.payload);
+            state.people = state.people.filter((person) => person.id !== action.payload);
         }
     }
 });

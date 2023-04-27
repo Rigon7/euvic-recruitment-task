@@ -1,10 +1,11 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useTranslation } from 'react-i18next';
-import NewRecordForm from '../form/NewRecordForm';
+import PersonForm from '../forms/PersonForm';
+import { PersonData } from '../../interfaces/PersonDataInterface';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -18,14 +19,14 @@ const style = {
     p: 4
 };
 
-const FormModal = ({ children }: { children: React.ReactNode }): JSX.Element => {
+const FormModal = ({ person, children }: { person?: PersonData; children: React.ReactNode }): JSX.Element => {
     const { t } = useTranslation();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = (): void => setOpen(true);
     const handleClose = (): void => setOpen(false);
 
     return (
-        <div>
+        <Box>
             <Button onClick={handleOpen}>{children}</Button>
             <Modal
                 open={open}
@@ -36,10 +37,10 @@ const FormModal = ({ children }: { children: React.ReactNode }): JSX.Element => 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         {t('addPersonTitle')}
                     </Typography>
-                    <NewRecordForm handleClose={handleClose} />
+                    <PersonForm handleClose={handleClose} person={person} />
                 </Box>
             </Modal>
-        </div>
+        </Box>
     );
 };
 export default FormModal;

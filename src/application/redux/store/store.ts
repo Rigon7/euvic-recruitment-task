@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import personsReducer, { PersonState } from '../features/PersonReducer';
+import personReducer, { PersonState } from '../features/PersonReducer';
 
 export interface StoreState {
     people: PersonState;
@@ -7,7 +7,7 @@ export interface StoreState {
 
 const store = configureStore({
     reducer: {
-        people: personsReducer
+        people: personReducer
     }
 });
 

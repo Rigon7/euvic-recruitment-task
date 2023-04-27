@@ -1,6 +1,6 @@
 {
-  "main": "Główny",
-  "views": "Widoki",
+  "main": "Lista",
+  "views": "Kafelki",
   "firstName": "Imię",
   "age": "Wiek",
   "birthDate": "Data urodzenia",
@@ -16,7 +16,7 @@
   "cancel":"Anuluj",
   "edit":"Edytuj",
   "delete": "Usuń",
-  "addPersonTitle":"Dodaj nową osobę do listy",
+  "addPersonTitle":"Wypełnij informacje o osobie",
   "selected":"Wybrano",
 
   "errorFirstNameRequired":"Podaj imię",
