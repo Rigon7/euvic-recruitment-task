@@ -49,15 +49,19 @@ export default function DrawerAppBar(props: Props): JSX.Element {
                 <Link to="/">EUVIC</Link>
             </Typography>
             <Divider />
-            <List>
+            <List sx={{ display: 'flex', flexDirection: 'column' }}>
                 {navItems.map((item) => (
                     <ListItem key={item.name} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <Link to={item.link}>{t(item.name)}</Link>
+                        <ListItemButton sx={{ display: 'flex', justifyContent: 'center', p: 1.5 }}>
+                            <Link to={item.link}>
+                                <Typography>{t(item.name)}</Typography>
+                            </Link>
                         </ListItemButton>
                     </ListItem>
                 ))}
-                <SelectLng />
+                <Box sx={{ mt: 5 }}>
+                    <SelectLng />{' '}
+                </Box>
             </List>
         </Box>
     );
@@ -80,16 +84,20 @@ export default function DrawerAppBar(props: Props): JSX.Element {
                     <Typography
                         variant="h5"
                         component="div"
-                        sx={{ px: 5, flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+                        sx={{ px: 5, flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
                         <Link to="/">EUVIC</Link>
                     </Typography>
-                    <Box sx={{ px: 5, display: { xs: 'none', sm: 'block' } }}>
+                    <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: '2', alignItems: 'center' }}>
                         {navItems.map((item) => (
-                            <Button key={item.name} sx={{ color: '#fff' }}>
-                                <Link to={item.link}>{t(item.name)}</Link>
-                            </Button>
+                            <Link to={item.link} key={item.name}>
+                                <Button sx={{ color: '#fff', display: 'flex', p: 2 }}>
+                                    <Typography sx={{ textTransform: 'capitalize' }}>{t(item.name)}</Typography>
+                                </Button>
+                            </Link>
                         ))}
-                        <SelectLng />
+                        <Box sx={{ ml: 7 }}>
+                            <SelectLng />
+                        </Box>
                     </Box>
                 </Toolbar>
             </AppBar>
@@ -103,7 +111,7 @@ export default function DrawerAppBar(props: Props): JSX.Element {
                         keepMounted: true // Better open performance on mobile.
                     }}
                     sx={{
-                        display: { xs: 'block', sm: 'none' },
+                        display: { xs: 'flex', sm: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
                     }}>
                     {drawer}

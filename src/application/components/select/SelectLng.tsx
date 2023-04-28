@@ -4,6 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../i18';
+import { Typography } from '@mui/material';
 
 const SelectLng = (): JSX.Element => {
     const { t } = useTranslation();
@@ -18,11 +19,13 @@ const SelectLng = (): JSX.Element => {
     return (
         <div>
             <FormControl>
-                <Select value={Language} onChange={handleLanguageChange}>
+                <Select sx={{ color: { sm: 'white' } }} value={Language} onChange={handleLanguageChange}>
                     <MenuItem value={'en'}>
-                        <em>{t('english')}</em>
+                        <Typography>{t('english')}</Typography>
                     </MenuItem>
-                    <MenuItem value={'pl'}>{t('polish')}</MenuItem>
+                    <MenuItem value={'pl'}>
+                        <Typography>{t('polish')}</Typography>
+                    </MenuItem>
                 </Select>
             </FormControl>
         </div>

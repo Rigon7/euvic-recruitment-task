@@ -1,4 +1,9 @@
 {
+  "helloThere": "Hello there!",
+  "welcomePageDesc":"This is an application that demonstrates how to use Redux and Material-UI in a React application.",
+  "mainCardDesc":"This section displays a list of people and their information in a table. You can edit, update, and delete records, as well as add new people.",
+  "viewsCardDesc":"This section displays the same information as the List View, but in a different format. People&apos;s information is displayed on cards.",
+
   "main": "List",
   "views": "Tiles",
   "firstName": "First Name",

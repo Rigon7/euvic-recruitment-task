@@ -1,4 +1,9 @@
 {
+  "helloThere": "Cześć!",
+  "welcomePageDesc":"Jest to aplikacja, która demonstruje, jak używać Redux i Material-UI w aplikacji React.",
+  "mainCardDesc":"Ta sekcja wyświetla listę osób i ich informacje w formie tabeli. Możesz edytować, aktualizować i usuwać rekordy, a także dodawać nowe osoby.",
+  "viewsCardDesc":"W tej sekcji wyświetlane są te same informacje, co w widoku listy, ale w innym formacie. Informacje o osobach są wyświetlane na kartach.",
+
   "main": "Lista",
   "views": "Kafelki",
   "firstName": "Imię",
