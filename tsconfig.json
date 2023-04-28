@@ -17,5 +17,5 @@
         "jsx": "react-jsx",
         "noUnusedLocals": false
     },
-    "include": ["src/**/*", "src/*", "src/index.tsx"]
+    "include": ["src/**/*", "src/*", "src/application/index.tsx"]
 }
