@@ -6,9 +6,9 @@ The application is built using React with TypeScript and Redux, and incorporates
 
 To get started, clone the repository and install the dependencies:
 
- `git clone https://github.com/WoXuS/registration-module.git`
+ `git clone https://github.com/dolbrycht/euvic-recruitment-task.git`
  
- `cd registration-module`
+ `cd euvic-recruitment-task`
  
  `npm install`
 
