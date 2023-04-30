@@ -1,5 +1,5 @@
 import Router from './static/router/router';
 
-export const App: React.FC = () => <Router />;
+export const App = (): JSX.Element => <Router />;
 
 export default App;

@@ -28,10 +28,9 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
             .date()
             .typeError(t('errorBirthDateNotValid') ?? '')
             .required()
-            .test('Is date greater', t('errorBirthDateNotValid') ?? '', function (value) {
-                if (!value) return true;
-                return moment(today).diff(value) > 0;
-            }),
+            .test('Is date greater', t('errorBirthDateNotValid') ?? '', (value): boolean =>
+                value ? moment(today).diff(value) > 0 : true
+            ),
         bio: yup.string().max(250, t('errorBioMaxCharacters') ?? '')
     });
 

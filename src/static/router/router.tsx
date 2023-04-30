@@ -24,7 +24,7 @@ const Router = (): React.ReactElement | null =>
                     element: <Views />
                 },
                 {
-                    path: '/*',
+                    path: '*',
                     element: <NotFoundPage />
                 }
             ]

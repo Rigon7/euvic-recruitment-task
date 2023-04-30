@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-const WelcomePage: React.FC = () => {
+const WelcomePage = (): JSX.Element => {
     const { t } = useTranslation();
 
     const cardStyle = {

@@ -250,7 +250,7 @@ export default function EnhancedTable(): JSX.Element {
                                             {row.birthDate}
                                         </TableCell>
                                         <TableCell align="left" className={styles['table-row__bio']}>
-                                            <span>{row.bio}</span>
+                                            <span className="table-row__bio-span">{row.bio}</span>
                                         </TableCell>
                                         <TableCell align="center" className={styles['table-row__actions']}>
                                             <ButtonGroup variant="text" aria-label="text button group">
