@@ -1,15 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 import { TextField, Box, Button, Typography } from '@mui/material';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import * as yup from 'yup';
@@ -43,7 +36,7 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
     });
 
     const {
-        register,
+        control,
         handleSubmit,
         formState: { errors }
     } = useForm<PersonData>({
@@ -75,46 +68,67 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
         if (props !== undefined) props.handleClose();
     };
 
-    const [value, setValue] = useState<Dayjs | null>(null);
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Box sx={{ mt: 5 }}>
-                <TextField sx={{ width: '100%' }} required id="name" label={t('firstName')} {...register('name')} />
-                <Typography>{errors.name?.message?.toString()}</Typography>
-
-                <TextField
-                    sx={{ width: '100%', mt: 2 }}
-                    required
-                    id="age"
-                    label={t('age')}
-                    type="number"
-                    {...register('age')}
+            <Box sx={{ mt: 2 }}>
+                <Controller
+                    name="name"
+                    control={control}
+                    render={({ field }): JSX.Element => (
+                        <TextField sx={{ width: '100%', mt: 2 }} id="name" label={`${t('firstName')} *`} {...field} />
+                    )}
                 />
-                <Typography>{errors.age?.message?.toString()}</Typography>
+                <Typography variant="body2" sx={{ color: 'red' }}>
+                    {errors.name?.message?.toString()}
+                </Typography>
 
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                        sx={{ mt: 2 }}
-                        {...register('birthDate')}
-                        label={t('birthDate')}
-                        value={value}
-                        onChange={(newValue) => setValue(newValue)}
-                    />
-                </LocalizationProvider>
-                {/* <input className="datePicker" type="date" {...register('birthDate')} /> */}
-                <Typography>{errors.birthDate?.message?.toString()}</Typography>
-
-                <TextField
-                    sx={{ width: '100%', mt: 2 }}
-                    id="outlined-multiline-static"
-                    label={t('bio')}
-                    multiline
-                    rows={4}
-                    {...register('bio')}
+                <Controller
+                    name="age"
+                    control={control}
+                    render={({ field }): JSX.Element => (
+                        <TextField
+                            sx={{ width: '100%', mt: 2 }}
+                            id="age"
+                            label={`${t('age')} *`}
+                            type="number"
+                            {...field}
+                        />
+                    )}
                 />
-                <Typography>{errors.bio?.message?.toString()}</Typography>
+                <Typography variant="body2" sx={{ color: 'red' }}>
+                    {errors.age?.message?.toString()}
+                </Typography>
 
+                <Controller
+                    name="birthDate"
+                    control={control}
+                    render={({ field }): JSX.Element => (
+                        <Box sx={{ width: '100%', mt: 2 }}>
+                            <input type="date" {...field} />
+                        </Box>
+                    )}
+                />
+                <Typography variant="body2" sx={{ color: 'red' }}>
+                    {errors.birthDate?.message?.toString()}
+                </Typography>
+
+                <Controller
+                    name="bio"
+                    control={control}
+                    render={({ field }): JSX.Element => (
+                        <TextField
+                            sx={{ width: '100%', mt: 2 }}
+                            id="outlined-multiline-static"
+                            label={t('bio')}
+                            multiline
+                            rows={4}
+                            {...field}
+                        />
+                    )}
+                />
+                <Typography variant="body2" sx={{ color: 'red' }}>
+                    {errors.bio?.message?.toString()}
+                </Typography>
                 <Box>
                     <Button type="submit">{t('save')}</Button>
                     <Button onClick={props.handleClose}>{t('cancel')}</Button>
