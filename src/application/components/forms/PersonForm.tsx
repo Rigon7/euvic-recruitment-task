@@ -1,8 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import Button from '@mui/material/Button';
-import { Box, Typography } from '@mui/material';
+
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { TextField, Box, Button, Typography } from '@mui/material';
+
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import * as yup from 'yup';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
 import { addPerson, updatePerson } from '../../redux/features/PersonReducer';
 import { PersonData } from '../../interfaces/PersonDataInterface';
+import '../forms/PersonForm.module.scss';
 
 const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JSX.Element => {
     const { t } = useTranslation();
@@ -65,22 +75,50 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
         if (props !== undefined) props.handleClose();
     };
 
+    const [value, setValue] = useState<Dayjs | null>(null);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder={t('firstName') ?? ''} {...register('name')} />
-            <Typography>{errors.name?.message?.toString()}</Typography>
+            <Box sx={{ mt: 5 }}>
+                <TextField sx={{ width: '100%' }} required id="name" label={t('firstName')} {...register('name')} />
+                <Typography>{errors.name?.message?.toString()}</Typography>
 
-            <input type="number" placeholder={t('age') ?? ''} {...register('age')} />
-            <Typography>{errors.age?.message?.toString()}</Typography>
+                <TextField
+                    sx={{ width: '100%', mt: 2 }}
+                    required
+                    id="age"
+                    label={t('age')}
+                    type="number"
+                    {...register('age')}
+                />
+                <Typography>{errors.age?.message?.toString()}</Typography>
 
-            <input type="date" {...register('birthDate')} />
-            <Typography>{errors.birthDate?.message?.toString()}</Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        sx={{ mt: 2 }}
+                        {...register('birthDate')}
+                        label={t('birthDate')}
+                        value={value}
+                        onChange={(newValue) => setValue(newValue)}
+                    />
+                </LocalizationProvider>
+                {/* <input className="datePicker" type="date" {...register('birthDate')} /> */}
+                <Typography>{errors.birthDate?.message?.toString()}</Typography>
 
-            <input type="textarea" placeholder={t('bio') ?? ''} {...register('bio')} />
-            <Typography>{errors.bio?.message?.toString()}</Typography>
-            <Box>
-                <Button type="submit">{t('save')}</Button>
-                <Button onClick={props.handleClose}>{t('cancel')}</Button>
+                <TextField
+                    sx={{ width: '100%', mt: 2 }}
+                    id="outlined-multiline-static"
+                    label={t('bio')}
+                    multiline
+                    rows={4}
+                    {...register('bio')}
+                />
+                <Typography>{errors.bio?.message?.toString()}</Typography>
+
+                <Box>
+                    <Button type="submit">{t('save')}</Button>
+                    <Button onClick={props.handleClose}>{t('cancel')}</Button>
+                </Box>
             </Box>
         </form>
     );
