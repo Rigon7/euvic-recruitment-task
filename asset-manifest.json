@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/euvic-recruitment-task/static/css/main.005929f7.css",
-    "main.js": "/euvic-recruitment-task/static/js/main.91732f0e.js",
-    "static/js/787.39e33350.chunk.js": "/euvic-recruitment-task/static/js/787.39e33350.chunk.js",
-    "index.html": "/euvic-recruitment-task/index.html",
-    "main.005929f7.css.map": "/euvic-recruitment-task/static/css/main.005929f7.css.map",
-    "main.91732f0e.js.map": "/euvic-recruitment-task/static/js/main.91732f0e.js.map",
-    "787.39e33350.chunk.js.map": "/euvic-recruitment-task/static/js/787.39e33350.chunk.js.map"
+    "main.css": "/static/css/main.005929f7.css",
+    "main.js": "/static/js/main.e5378799.js",
+    "static/js/787.39e33350.chunk.js": "/static/js/787.39e33350.chunk.js",
+    "index.html": "/index.html",
+    "main.005929f7.css.map": "/static/css/main.005929f7.css.map",
+    "main.e5378799.js.map": "/static/js/main.e5378799.js.map",
+    "787.39e33350.chunk.js.map": "/static/js/787.39e33350.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.005929f7.css",
-    "static/js/main.91732f0e.js"
+    "static/js/main.e5378799.js"
   ]
 }
