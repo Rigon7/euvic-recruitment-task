@@ -1,6 +1,9 @@
 # Euvic Recruitment Task
 The application is built using React with TypeScript and Redux, and incorporates Material UI components. It consists of two subpages, the main page contains a CRUD table, and views page displays data from the table. The app's states and data are handled through Redux. Additionally, React hook form and Yup were utilized to manage the form for adding new person data.
 
+## Preview
+
+https://dolbrycht.github.io/
 
 ## Intallatiom
 
