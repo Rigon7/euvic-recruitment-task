@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/euvic-recruitment-task/static/css/main.005929f7.css",
-    "main.js": "/euvic-recruitment-task/static/js/main.338f0d1a.js",
+    "main.js": "/euvic-recruitment-task/static/js/main.91732f0e.js",
     "static/js/787.39e33350.chunk.js": "/euvic-recruitment-task/static/js/787.39e33350.chunk.js",
     "index.html": "/euvic-recruitment-task/index.html",
     "main.005929f7.css.map": "/euvic-recruitment-task/static/css/main.005929f7.css.map",
-    "main.338f0d1a.js.map": "/euvic-recruitment-task/static/js/main.338f0d1a.js.map",
+    "main.91732f0e.js.map": "/euvic-recruitment-task/static/js/main.91732f0e.js.map",
     "787.39e33350.chunk.js.map": "/euvic-recruitment-task/static/js/787.39e33350.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.005929f7.css",
-    "static/js/main.338f0d1a.js"
+    "static/js/main.91732f0e.js"
   ]
 }
