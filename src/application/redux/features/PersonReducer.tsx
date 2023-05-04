@@ -20,10 +20,10 @@ const personSlice = createSlice({
             state.people = [action.payload, ...state.people];
         },
         updatePerson(state, action: PayloadAction<PersonData>) {
-            const personToUpdate = state.people.find((person) => person.id === action.payload.id);
+            const personIndex = state.people.findIndex((person) => person.id === action.payload.id);
 
-            if (personToUpdate) {
-                Object.assign(personToUpdate, action.payload);
+            if (state.people[personIndex]) {
+                state.people[personIndex] = { ...state.people[personIndex], ...action.payload };
             }
         },
         deletePerson(state, action: PayloadAction<string>) {

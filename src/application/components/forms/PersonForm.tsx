@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { TextField, Box, Button, Typography } from '@mui/material';
+import { TextField, Box, Button, Typography, Input } from '@mui/material';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -41,11 +41,11 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
     } = useForm<PersonData>({
         resolver: yupResolver(schema),
         defaultValues: {
-            id: props.person?.id || '',
-            name: props.person?.name || '',
-            age: props.person?.age || undefined,
-            birthDate: props.person?.birthDate || '',
-            bio: props.person?.bio || ''
+            id: props.person?.id ?? '',
+            name: props.person?.name ?? '',
+            age: props.person?.age ?? 0,
+            birthDate: props.person?.birthDate ?? '',
+            bio: props.person?.bio ?? ''
         }
     });
 
