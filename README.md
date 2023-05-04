@@ -3,7 +3,7 @@ The application is built using React with TypeScript and Redux, and incorporates
 
 ## Preview
 
-https://dolbrycht.github.io/
+https://dolbrycht.github.io/euvic-recruitment-task/
 
 ## Intallatiom
 
