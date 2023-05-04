@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 import MainLayout from '../../application/layouts/main-layout/MainLayout';
 import NotFoundPage from '../../application/pages/not-found/NotFoundPage';
 import WelcomePage from '../../application/pages/welcome-page/WelcomePage';
@@ -22,6 +22,10 @@ const Router = (): React.ReactElement | null =>
                 {
                     path: 'views',
                     element: <Views />
+                },
+                {
+                    path: '/euvic-recruitment-task',
+                    element: <Navigate to="/" />
                 },
                 {
                     path: '*',
