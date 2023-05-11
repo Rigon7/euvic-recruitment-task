@@ -19,12 +19,19 @@ const SelectLng = (): JSX.Element => {
     return (
         <div>
             <FormControl>
-                <Select sx={{ color: { sm: 'white' } }} value={Language} onChange={handleLanguageChange}>
+                <Select
+                    sx={{
+                        color: { sm: 'white' },
+                        boxShadow: 'none',
+                        '.MuiOutlinedInput-notchedOutline': { border: 0 }
+                    }}
+                    value={Language}
+                    onChange={handleLanguageChange}>
                     <MenuItem value={'en'}>
-                        <Typography>{t('english')}</Typography>
+                        <Typography sx={{ fontSize: '0.9rem' }}>{t('english')}</Typography>
                     </MenuItem>
                     <MenuItem value={'pl'}>
-                        <Typography>{t('polish')}</Typography>
+                        <Typography sx={{ fontSize: '0.9rem' }}>{t('polish')}</Typography>
                     </MenuItem>
                 </Select>
             </FormControl>
