@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { TextField, Box, Button, Typography, Input } from '@mui/material';
+import { TextField, Box, Button, Typography, Input, FormControl, FormHelperText, InputLabel } from '@mui/material';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -43,7 +43,7 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
         defaultValues: {
             id: props.person?.id ?? '',
             name: props.person?.name ?? '',
-            age: props.person?.age ?? 0,
+            age: props.person?.age,
             birthDate: props.person?.birthDate ?? '',
             bio: props.person?.bio ?? ''
         }
@@ -69,65 +69,68 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Box sx={{ mt: 2 }}>
+            <Box>
                 <Controller
                     name="name"
                     control={control}
                     render={({ field }): JSX.Element => (
-                        <TextField sx={{ width: '100%', mt: 2 }} id="name" label={`${t('firstName')} *`} {...field} />
+                        <FormControl fullWidth variant="standard" margin="normal">
+                            <TextField label={`${t('firstName')} *`} id="name" variant="standard" {...field} />
+                            <FormHelperText error id="error-name">
+                                {errors.name?.message?.toString()}
+                            </FormHelperText>
+                        </FormControl>
                     )}
                 />
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                    {errors.name?.message?.toString()}
-                </Typography>
 
                 <Controller
                     name="age"
                     control={control}
                     render={({ field }): JSX.Element => (
-                        <TextField
-                            sx={{ width: '100%', mt: 2 }}
-                            id="age"
-                            label={`${t('age')} *`}
-                            type="number"
-                            {...field}
-                        />
+                        <FormControl fullWidth variant="standard" margin="normal">
+                            <InputLabel htmlFor="age">{`${t('age')} *`}</InputLabel>
+                            <Input type="number" id="age" {...field} />
+                            <FormHelperText error id="error-age">
+                                {errors.age?.message?.toString()}
+                            </FormHelperText>
+                        </FormControl>
                     )}
                 />
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                    {errors.age?.message?.toString()}
-                </Typography>
 
                 <Controller
                     name="birthDate"
                     control={control}
                     render={({ field }): JSX.Element => (
-                        <Box sx={{ width: '100%', mt: 2 }}>
-                            <input type="date" {...field} />
-                        </Box>
+                        <FormControl fullWidth variant="standard" margin="normal">
+                            <InputLabel htmlFor="birthDate">{`${t('birthDate')} *`}</InputLabel>
+                            <Input type="date" id="birthDate" {...field} />
+                            <FormHelperText error id="error-birthDate">
+                                {errors.birthDate?.message?.toString()}
+                            </FormHelperText>
+                        </FormControl>
                     )}
                 />
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                    {errors.birthDate?.message?.toString()}
-                </Typography>
 
                 <Controller
                     name="bio"
                     control={control}
                     render={({ field }): JSX.Element => (
-                        <TextField
-                            sx={{ width: '100%', mt: 2 }}
-                            id="outlined-multiline-static"
-                            label={t('bio')}
-                            multiline
-                            rows={4}
-                            {...field}
-                        />
+                        <FormControl fullWidth variant="standard" margin="normal">
+                            <TextField
+                                label={`${t('bio')} *`}
+                                id="bio"
+                                variant="standard"
+                                multiline
+                                maxRows="7"
+                                {...field}
+                            />
+                            <FormHelperText error id="error-bio">
+                                {errors.bio?.message?.toString()}
+                            </FormHelperText>
+                        </FormControl>
                     )}
                 />
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                    {errors.bio?.message?.toString()}
-                </Typography>
+
                 <Box>
                     <Button type="submit">{t('save')}</Button>
                     <Button onClick={props.handleClose}>{t('cancel')}</Button>
