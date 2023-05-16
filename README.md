@@ -5,7 +5,7 @@ The application is built using React with TypeScript and Redux, and incorporates
 
 https://dolbrycht.github.io/euvic-recruitment-task/
 
-## Intallatiom
+## Intallation
 
 To get started, clone the repository and install the dependencies:
 
