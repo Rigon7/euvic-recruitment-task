@@ -1,7 +1,7 @@
 export interface PersonData {
     id: string;
     name: string;
-    age: number;
+    age: string;
     birthDate: string;
     bio: string;
 }

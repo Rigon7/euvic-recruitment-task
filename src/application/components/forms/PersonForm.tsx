@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { TextField, Box, Button, Typography, Input, FormControl, FormHelperText, InputLabel } from '@mui/material';
+import { TextField, Box, Button, Input, FormControl, FormHelperText, InputLabel } from '@mui/material';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
 import { addPerson, updatePerson } from '../../redux/features/PersonReducer';
 import { PersonData } from '../../interfaces/PersonDataInterface';
-import '../forms/PersonForm.module.scss';
+import styles from '../forms/PersonForm.module.scss';
 
 const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JSX.Element => {
     const { t } = useTranslation();
@@ -23,7 +23,9 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
         age: yup
             .string()
             .required(t('errorAgeRequired') ?? '')
-            .matches(/^[1-9]{1,3}$/, t('errorAgeNotValid') ?? ''),
+            .test('Is valid age', t('errorAgeNotValid') ?? '', (value): boolean =>
+                value ? parseInt(value) > 0 && parseInt(value) < 130 : true
+            ),
         birthDate: yup
             .date()
             .typeError(t('errorBirthDateNotValid') ?? '')
@@ -43,7 +45,7 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
         defaultValues: {
             id: props.person?.id ?? '',
             name: props.person?.name ?? '',
-            age: props.person?.age,
+            age: props.person?.age ?? '',
             birthDate: props.person?.birthDate ?? '',
             bio: props.person?.bio ?? ''
         }
@@ -88,8 +90,7 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
                     control={control}
                     render={({ field }): JSX.Element => (
                         <FormControl fullWidth variant="standard" margin="normal">
-                            <InputLabel htmlFor="age">{`${t('age')} *`}</InputLabel>
-                            <Input type="number" id="age" {...field} />
+                            <TextField id="age" label={`${t('age')} *`} {...field} variant="standard" />
                             <FormHelperText error id="error-age">
                                 {errors.age?.message?.toString()}
                             </FormHelperText>
@@ -117,11 +118,12 @@ const PersonForm = (props: { handleClose: () => void; person?: PersonData }): JS
                     render={({ field }): JSX.Element => (
                         <FormControl fullWidth variant="standard" margin="normal">
                             <TextField
-                                label={`${t('bio')} *`}
+                                className={styles['input-scrollbar-hide']}
+                                label={t('bio')}
                                 id="bio"
                                 variant="standard"
-                                multiline
-                                maxRows="7"
+                                multiline={true}
+                                maxRows={7}
                                 {...field}
                             />
                             <FormHelperText error id="error-bio">
