@@ -1,6 +1,4 @@
 import { useTranslation } from 'react-i18next';
-
-import * as React from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
